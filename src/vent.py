@@ -17,6 +17,7 @@ class Vent:
 		self.username = None
 		self.auth_token = None
 
+
 	def login(self, username: str, password: str):
 		data = {
 			"user": {
@@ -26,12 +27,12 @@ class Vent:
 		}
 		response = requests.post(
 			f"{self.api}/v1/sign_in",
-			data=data,
+			json=data,
 			headers=self.headers).json()
-		if "id" in response:
-			self.user_id = response["id"]
-			self.username = response["username"]
-			self.auth_token = response["authentication_token"]
+		if "user" in response:
+			self.user_id = response["user"]["id"]
+			self.username = response["user"]["username"]
+			self.auth_token = response["user"]["authentication_token"]
 			self.headers["x-user-token"] = self.auth_token
 			self.headers["x-user-username"] = self.username
 		return response
@@ -50,7 +51,7 @@ class Vent:
 		}
 		return requests.post(
 			f"{self.api}/v1/registrations",
-			data=data,
+			json=data,
 			headers=self.headers).json()
 
 	def get_interests(
@@ -154,7 +155,7 @@ class Vent:
 		}
 		return requests.post(
 			f"{self.api}/v1/vents/{vent_id}/comments",
-			data=data,
+			json=data,
 			headers=self.headers).json()
 
 	def edit_comment(
@@ -169,7 +170,7 @@ class Vent:
 		}
 		return requests.put(
 			f"{self.api}/v1/vents/{vent_id}/comments/{comment_id}",
-			data=data,
+			json=data,
 			headers=self.headers).json()
 	
 	def delete_comment(self, vent_id: str, comment_id: str):
@@ -193,7 +194,7 @@ class Vent:
 		}
 		return requests.post(
 			f"{self.api}/v1/vents/{vent_id}/reports",
-			data=data,
+			json=data,
 			headers=self.headers).json()
 
 	def subscript_user(self, user_id: str):
@@ -232,7 +233,7 @@ class Vent:
 		}
 		return requests.post(
 			f"{self.api}/v1/users/{user_id}/reports",
-			data=data,
+			json=data,
 			headers=self.headers).json()
 
 	def get_group_info(self, group_id: str):
@@ -276,7 +277,7 @@ class Vent:
 		}
 		return requests.post(
 			f"{self.api}/v1/groups/{group_id}/reports",
-			data=data,
+			json=data,
 			headers=self.headers).json()
 
 	def create_vent(
@@ -301,7 +302,7 @@ class Vent:
 			data["vent"]["group_id"] = group_id
 		return requests.post(
 			f"{self.api}/v1/my/vents",
-			data=data,
+			json=data,
 			headers=self.headers).json()
 
 	def edit_vent(
@@ -327,7 +328,7 @@ class Vent:
 			data["vent"]["group_id"] = group_id
 		return requests.put(
 			f"{self.api}/v1/my/vents/{vent_id}",
-			data=data,
+			json=data,
 			headers=self.headers).json()
 
 	def delete_vent(self, vent_id: str):
@@ -371,7 +372,7 @@ class Vent:
 		}
 		return requests.post(
 			f"{self.api}/v1/groups",
-			data=data,
+			json=data,
 			headers=self.headers).json()
 
 
@@ -394,7 +395,7 @@ class Vent:
 		}
 		return requests.put(
 			f"{self.api}/v1/groups/{group_id}",
-			data=data,
+			json=data,
 			headers=self.headers).json()
 
 	def delete_group(self, group_id: str):
@@ -441,7 +442,7 @@ class Vent:
 		}
 		return requests.put(
 			f"{self.api}/v1/my/notifications/mark_read",
-			data=data,
+			json=data,
 			headers=self.headers).json()
 
 	def get_listen_requests(self):
@@ -457,7 +458,7 @@ class Vent:
 		}
 		return requests.post(
 			f"{self.api}/v2/my/conversations",
-			data=data,
+			json=data,
 			headers=self.headers).json()
 
 	def get_suggested_users(self):
@@ -491,14 +492,14 @@ class Vent:
 			data["user"]["has_private_bio"] = has_private_bio
 		return requests.put(
 			f"{self.api}/v1/my/user",
-			data=data,
+			json=data,
 			headers=self.headers).json()
 
 	def reset_password(self, email: str):
 		data = {"email": email}
 		return requests.post(
 			f"{self.api}/v1/forgot-password",
-			data=data,
+			json=data,
 			headers=self.headers).json()
 
 	def resend_email_confirmation(self):
@@ -514,7 +515,7 @@ class Vent:
 		}
 		return requests.put(
 			f"{self.api}/v1/my/user",
-			data=data,
+			json=data,
 			headers=self.headers).json()
 
 	def get_blocked_users(self, per_page: int = 25):

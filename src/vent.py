@@ -2,7 +2,7 @@ import requests
 from datetime import datetime
 
 class Vent:
-	def __init__(self):
+	def __init__(self) -> None:
 		self.api = "https://api.ventfeed.com/api"
 		self.headers = {
 			"user-agent": "okhttp/3.12.13",
@@ -18,7 +18,7 @@ class Vent:
 		self.auth_token = None
 
 
-	def login(self, username: str, password: str):
+	def login(self, username: str, password: str) -> dict:
 		data = {
 			"user": {
 				"username": username,
@@ -41,7 +41,7 @@ class Vent:
 			self,
 			username: str,
 			password: str,
-			email: str):
+			email: str) -> dict:
 		data = {
 			"user": {
 				"username": username,
@@ -58,48 +58,48 @@ class Vent:
 			self,
 			per_page: int = 25,
 			order: str = "asc",
-			field: str = "name"):
+			field: str = "name") -> dict:
 		return requests.get(
 			f"{self.api}/v1/interests?per_page={per_page}&from[order]={order}&from[field]={field}",
 			headers=self.headers).json()
 
-	def get_suggested_groups(self, per_page: int = 30):
+	def get_suggested_groups(self, per_page: int = 30) -> dict:
 		return requests.get(
 			f"{self.api}/v1/suggested_groups?per_page={per_page}",
 			headers=self.headers).json()
 
-	def listen_group(self, group_id: str, from_suggested_groups: bool = False):
+	def listen_group(self, group_id: str, from_suggested_groups: bool = False) -> dict:
 		return requests.post(
 			f"{self.api}/v1/groups/{group_id}/listen?from_suggested_groups={from_suggested_groups}",
 			headers=self.headers).json()
 
-	def unlisten_group(self, group_id: str, from_suggested_groups: bool = False):
+	def unlisten_group(self, group_id: str, from_suggested_groups: bool = False) -> dict:
 		return requests.delete(
 			f"{self.api}/v1/groups/{group_id}/unlisten?from_suggested_groups={from_suggested_groups}",
 			headers=self.headers).json()
 
 
-	def get_user_info(self, user_id: str):
+	def get_user_info(self, user_id: str) -> dict:
 		return requests.get(
 			f"{self.api}/v1/users/{user_id}",
 			headers=self.headers).json()
 
-	def get_backgrounds_list(self):
+	def get_backgrounds_list(self) -> dict:
 		return requests.get(
 			f"{self.api}/v1/backgrounds",
 			headers=self.headers).json()
 
-	def get_emotion_categories(self):
+	def get_emotion_categories(self) -> dict:
 		return requests.get(
 			f"{self.api}/v1/emotion_categories",
 			headers=self.headers).json()
 
-	def get_interaction_types(self):
+	def get_interaction_types(self) -> dict:
 		return requests.get(
 			f"{self.api}/v2/interaction_types",
 			headers=self.headers).json()
 
-	def get_notifications_count(self):
+	def get_notifications_count(self) -> dict:
 		return requests.get(
 			f"{self.api}/v1/my/notifications/notifications_count",
 			headers=self.headers).json()
@@ -108,17 +108,17 @@ class Vent:
 			self,
 			per_page: int = 10,
 			order: str = "desc",
-			field: str = "created_at"):
+			field: str = "created_at") -> dict:
 		return requests.get(
 			f"{self.api}/v2/vents/latest?per_page={per_page}&from[order]={order}&from[field]={field}&from[value]={datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3]}Z",
 			headers=self.headers).json()
 
-	def listen_user(self, user_id: str):
+	def listen_user(self, user_id: str) -> dict:
 		return requests.post(
 			f"{self.api}/v1/users/{user_id}/listen",
 			headers=self.headers).json()
 
-	def unlisten_user(self, user_id: str):
+	def unlisten_user(self, user_id: str) -> dict:
 		return requests.delete(
 			f"{self.api}/v1/users/{user_id}/unlisten",
 			headers=self.headers).json()
@@ -128,26 +128,39 @@ class Vent:
 			user_id: str,
 			per_page: int = 10,
 			order: str = "desc",
-			field: str = "created_at"):
+			field: str = "created_at") -> dict:
 		return requests.get(
 			f"{self.api}/v2/vents?q[user_id_eq]={user_id}&per_page={per_page}&from[order]={order}&from[field]={field}",
 			headers=self.headers).json()
 
-	def get_user_followers(self, user_id: str, per_page: int = 25):
+	def get_user_followers(
+			self,
+			user_id: str,
+			per_page: int = 25) -> dict:
 		return requests.get(
 			f"{self.api}/v1/users/{user_id}/followers?per_page={per_page}",
 			headers=self.headers).json()
 
-	def get_user_followings(self, user_id: str, per_page: int = 25):
+	def get_user_followings(
+			self,
+			user_id: str,
+			per_page: int = 25) -> dict:
 		return requests.get(
 			f"{self.api}/v1/users/{user_id}/followings?per_page={per_page}",
 			headers=self.headers).json()
 
-	def get_user_interactions(self, user_id: str, per_page: int = 10):
+	def get_user_interactions(
+			self,
+			user_id: str,
+			per_page: int = 10) -> dict:
 		return requests.get(
-			f"{self.api}/v2/users/{user_id}/vents/interacted?per_page={per_page}")
+			f"{self.api}/v2/users/{user_id}/vents/interacted?per_page={per_page}",
+			headers=self.headers).json()
 
-	def comment_vent(self, vent_id: str, comment: str):
+	def comment_vent(
+			self,
+			vent_id: str,
+			comment: str) -> dict:
 		data = {
 			"comment": {
 				"body": comment
@@ -162,7 +175,7 @@ class Vent:
 			self,
 			vent_id: str,
 			comment_id: str,
-			comment: str):
+			comment: str) -> dict:
 		data = {
 			"comment": {
 				"body": comment
@@ -173,12 +186,15 @@ class Vent:
 			json=data,
 			headers=self.headers).json()
 	
-	def delete_comment(self, vent_id: str, comment_id: str):
+	def delete_comment(
+			self,
+			vent_id: str,
+			comment_id: str) -> int:
 		return requests.delete(
 			f"{self.api}/v1/vents/{vent_id}/comments/{comment_id}",
 			headers=self.headers).status_code
 
-	def get_report_reasons(self, object_type: int = 0):
+	def get_report_reasons(self, object_type: int = 0) -> dict:
 		return requests.get(
 			f"{self.api}/v1/report_reasons?q[object_type_eq]={object_type}",
 			headers=self.headers).json()
@@ -187,7 +203,7 @@ class Vent:
 			self,
 			vent_id: str,
 			comment: str,
-			reason_id: str):
+			reason_id: str) -> dict:
 		data = {
 			"comment": comment,
 			"report_reason_id": reason_id
@@ -197,27 +213,27 @@ class Vent:
 			json=data,
 			headers=self.headers).json()
 
-	def subscript_user(self, user_id: str):
+	def subscript_user(self, user_id: str) -> dict:
 		return requests.post(
 			f"{self.api}/v1/users/{user_id}/user_subscriptions",
 			headers=self.headers).json()
 
-	def unsubscript_user(self, user_id: str):
+	def unsubscript_user(self, user_id: str) -> dict:
 		return requests.delete(
 			f"{self.api}/v1/users/{user_id}/user_subscriptions",
 			headers=self.headers).json()
 
-	def get_user_public_url(self, user_id: str):
+	def get_user_public_url(self, user_id: str) -> dict:
 		return requests.get(
 			f"{self.api}/v1/users/{user_id}/public_url",
 			headers=self.headers).json()
 
-	def block_user(self, user_id: str):
+	def block_user(self, user_id: str) -> dict:
 		return requests.post(
 			f"{self.api}/v1/users/{user_id}/block",
 			headers=self.headers).json()
 
-	def unblock_user(self, user_id: str):
+	def unblock_user(self, user_id: str) -> dict:
 		return requests.delete(
 			f"{self.api}/v1/users/{user_id}/unblock",
 			headers=self.headers).json()
@@ -226,7 +242,7 @@ class Vent:
 			self,
 			user_id: str,
 			comment: str,
-			reason_id: str):
+			reason_id: str) -> dict:
 		data = {
 			"comment": comment,
 			"report_reason_id": reason_id
@@ -236,7 +252,7 @@ class Vent:
 			json=data,
 			headers=self.headers).json()
 
-	def get_group_info(self, group_id: str):
+	def get_group_info(self, group_id: str) -> dict:
 		return requests.get(
 			f"{self.api}/v1/groups/{group_id}",
 			headers=self.headers).json()
@@ -246,22 +262,22 @@ class Vent:
 			group_id: str,
 			per_page: int = 10,
 			order: str = "desc",
-			field: str = "created_at"):
+			field: str = "created_at") -> dict:
 		return requests.get(
 			f"{self.api}/v2/groups/{group_id}/vents?per_page={per_page}&from[order]={order}&from[field]={field}&from[value]={datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3]}Z",
 			headers=self.headers).json()
 
-	def get_group_trending_vents(self, group_id: str, per_page: int = 10):
+	def get_group_trending_vents(self, group_id: str, per_page: int = 10) -> dict:
 		return requests.get(
 			f"{self.api}/v2/groups/{group_id}/vents/on_the_rise?per_page={per_page}",
 			headers=self.headers).json()
 
-	def mute_group(self, group_id: str):
+	def mute_group(self, group_id: str) -> dict:
 		return requests.post(
 			f"{self.api}/v1/groups/{group_id}/mute",
 			headers=self.headers).json()
 
-	def unmute_group(self, group_id: str):
+	def unmute_group(self, group_id: str) -> dict:
 		return requests.delete(
 			f"{self.api}/v1/groups/{group_id}/unmute",
 			headers=self.headers).json()
@@ -270,7 +286,7 @@ class Vent:
 			self,
 			group_id: str,
 			comment: str,
-			reason_id: str):
+			reason_id: str) -> dict:
 		data = {
 			"comment": comment,
 			"report_reason_id": reason_id
@@ -287,7 +303,7 @@ class Vent:
 			city: str = None,
 			group_id: str = None,
 			comment_setting: str = "comments_enabled",
-			privacy_setting: str = "privacy_public"):
+			privacy_setting: str = "privacy_public") -> dict:
 		data = {
 			"vent": {
 				"emotion_id": emotion_id,
@@ -313,7 +329,7 @@ class Vent:
 			city: str = None,
 			group_id: str = None,
 			comment_setting: str = "comments_enabled",
-			privacy_setting: str = "privacy_public"):
+			privacy_setting: str = "privacy_public") -> dict:
 		data = {
 			"vent": {
 				"emotion_id": emotion_id,
@@ -331,7 +347,7 @@ class Vent:
 			json=data,
 			headers=self.headers).json()
 
-	def delete_vent(self, vent_id: str):
+	def delete_vent(self, vent_id: str) -> int:
 		return requests.delete(
 			f"{self.api}/v1/my/vents/{vent_id}",
 			headers=self.headers).status_code
@@ -340,7 +356,7 @@ class Vent:
 			self,
 			per_page: int = 15,
 			order: str = "desc",
-			field: str = "last_vented_at"):
+			field: str = "last_vented_at") -> dict:
 		return requests.get(
 			f"{self.api}/v1/my/groups?per_page={per_page}&from[order]={order}&from[field]={field}&from[value]=9999-01-01T00:00:00.000Z",
 			headers=self.headers).json()
@@ -349,7 +365,7 @@ class Vent:
 			self,
 			per_page: int = 15,
 			order: str = "desc",
-			field: str = "created_at"):
+			field: str = "created_at") -> dict:
 		return requests.get(
 			f"{self.api}/v2/my/feed?per_page={per_page}&from[order]={order}&from[field]={field}&from[value]=9999-01-01T00:00:00.000Z",
 			headers=self.headers).json()
@@ -360,7 +376,7 @@ class Vent:
 			description: str,
 			interest_ids: list,
 			is_nsfw: bool = False,
-			color: str = "#000000"):
+			color: str = "#000000") -> dict:
 		data = {
 			"group": {
 				"name": group_name,
@@ -383,7 +399,7 @@ class Vent:
 			description: str,
 			interest_ids: list,
 			is_nsfw: bool = False,
-			color: str = "#000000"):
+			color: str = "#000000") -> dict:
 		data = {
 			"group": {
 				"name": group_name,
@@ -398,22 +414,22 @@ class Vent:
 			json=data,
 			headers=self.headers).json()
 
-	def delete_group(self, group_id: str):
+	def delete_group(self, group_id: str) -> int:
 		return requests.delete(
 			f"{self.api}/v1/groups/{group_id}",
 			headers=self.headers).status_code
 
-	def get_group_followers(self, group_id: str,  per_page: int = 25):
+	def get_group_followers(self, group_id: str,  per_page: int = 25) -> dict:
 		return requests.get(
 			f"{self.api}/v1/groups/{group_id}/followers?per_page={per_page}",
 			headers=self.headers).json()
 
-	def get_group_blocked_followers(self, group_id: str,  per_page: int = 25):
+	def get_group_blocked_followers(self, group_id: str,  per_page: int = 25) -> dict:
 		return requests.get(
 			f"{self.api}/v1/groups/{group_id}/followers/blocked?per_page={per_page}",
 			headers=self.headers).json()
 
-	def get_notifications_subscriptions(self):
+	def get_notifications_subscriptions(self) -> dict:
 		return requests.get(
 			f"{self.api}/v1/my/notifications/subscriptions",
 			headers=self.headers).json()
@@ -422,7 +438,7 @@ class Vent:
 			self,
 			per_page: int = 10,
 			order: str = "desc",
-			field: str = "last_activity_at"):
+			field: str = "last_activity_at") -> dict:
 		return requests.get(
 			f"{self.api}/v1/my/user_notifications?per_page={per_page}&from[order]={order}&from[field]={field}&from[value]=9999-01-01T00:00:00.000Z",
 			headers=self.headers).json()
@@ -431,12 +447,12 @@ class Vent:
 			self,
 			per_page: int = 10,
 			order: str = "desc",
-			field: str = "last_activity_at"):
+			field: str = "last_activity_at") -> dict:
 		return requests.get(
 			f"{self.api}/v1/my/system_notifications?per_page={per_page}&from[order]={order}&from[field]={field}&from[value]=9999-01-01T00:00:00.000Z",
 			headers=self.headers).json()
 
-	def mark_notifications_read(self, notification_ids: list):
+	def mark_notifications_read(self, notification_ids: list) -> dict:
 		data = {
 			"ids": notification_ids
 		}
@@ -445,12 +461,12 @@ class Vent:
 			json=data,
 			headers=self.headers).json()
 
-	def get_listen_requests(self):
+	def get_listen_requests(self) -> dict:
 		return requests.get(
 			f"{self.api}/v1/my/listen_requests",
 			headers=self.headers).json()
 
-	def start_conversation(self, user_id: str):
+	def start_conversation(self, user_id: str) -> dict:
 		data = {
 			"conversation": {
 				"user_id": user_id
@@ -461,7 +477,7 @@ class Vent:
 			json=data,
 			headers=self.headers).json()
 
-	def get_suggested_users(self):
+	def get_suggested_users(self) -> dict:
 		return requests.get(
 			f"{self.api}/v1/users/suggested",
 			headers=self.headers).json()
@@ -474,7 +490,7 @@ class Vent:
 			birthday: str = "1994-04-04",
 			nsfw_setting: str = "collapse",
 			account_is_public: int = 1,
-			has_private_bio: int = 0):
+			has_private_bio: int = 0) -> dict:
 		data = {}
 		if profile_image_url:
 			data["user"]["profile_image_url"] = profile_image_url
@@ -495,19 +511,19 @@ class Vent:
 			json=data,
 			headers=self.headers).json()
 
-	def reset_password(self, email: str):
+	def reset_password(self, email: str) -> dict:
 		data = {"email": email}
 		return requests.post(
 			f"{self.api}/v1/forgot-password",
 			json=data,
 			headers=self.headers).json()
 
-	def resend_email_confirmation(self):
+	def resend_email_confirmation(self) -> dict:
 		return requests.post(
 			f"{self.api}/v1/my/user/resend_confirmation",
 			headers=self.headers).json()
 
-	def change_password(self, password: str):
+	def change_password(self, password: str) -> dict:
 		data = {
 			"user": {
 				"password": password
@@ -518,12 +534,12 @@ class Vent:
 			json=data,
 			headers=self.headers).json()
 
-	def get_blocked_users(self, per_page: int = 25):
+	def get_blocked_users(self, per_page: int = 25) -> dict:
 		return requests.get(
 			f"{self.api}/v1/my/inverse_blockings?per_page={per_page}",
 			headers=self.headers).json()
 
-	def deactivate_account(self):
+	def deactivate_account(self) -> int:
 		return requests.delete(
 			f"{self.api}/v1/my/user",
 			headers=self.headers).status_code
